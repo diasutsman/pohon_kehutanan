@@ -1,3 +1,4 @@
+import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -12,38 +13,74 @@ class WelcomePage extends StatelessWidget {
       body: Stack(
         fit: StackFit.expand,
         children: [
-          // Forest background image
+          // Background image - full cover
           Image.asset(
-            'figma-uis/welcome.png',
+            'assets/images/bg-login.png',
             fit: BoxFit.cover,
             width: size.width,
             height: size.height,
           ),
-          // Gradient overlay
+
+          // Blurred bottom section (~60% from top, 40% height)
+          Positioned(
+            left: 0,
+            right: 0,
+            bottom: 0,
+            height: size.height * 0.40,
+            child: ClipRect(
+              child: BackdropFilter(
+                filter: ImageFilter.blur(sigmaX: 5.85, sigmaY: 5.85),
+                child: Container(color: Colors.transparent),
+              ),
+            ),
+          ),
+
+          // First gradient overlay (starts fading earlier)
           Container(
-            decoration: BoxDecoration(
+            decoration: const BoxDecoration(
               gradient: LinearGradient(
-                begin: const Alignment(0.5, 0.3),
+                begin: Alignment.topCenter,
                 end: Alignment.bottomCenter,
+                stops: [0.3648, 0.6373, 0.9572],
                 colors: [
-                  const Color(0x00009933),
-                  const Color(0xFF003311).withValues(alpha: 0.85),
-                  const Color(0xFF02200C),
+                  Color(0x00009933),
+                  Color(0xFF003311),
+                  Color(0xFF03210D),
                 ],
               ),
             ),
           ),
+
+          // Second gradient overlay (stronger at bottom)
+          Container(
+            decoration: const BoxDecoration(
+              gradient: LinearGradient(
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+                stops: [0.6416, 0.8605, 1.0],
+                colors: [
+                  Color(0x00009933),
+                  Color(0xFF003311),
+                  Color(0xFF03210D),
+                ],
+              ),
+            ),
+          ),
+
           // Content
           SafeArea(
+            bottom: false,
             child: Column(
               children: [
-                const Spacer(flex: 2),
+                // Top spacing to position logo at ~25% from top
+                SizedBox(height: size.height * 0.20),
+
                 // Logo
                 Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 60),
+                  padding: EdgeInsets.symmetric(horizontal: size.width * 0.20),
                   child: Image.asset(
-                    'figma-uis/LOGIN.png',
-                    height: 80,
+                    'assets/images/logo.png',
+                    height: size.height * 0.113,
                     fit: BoxFit.contain,
                     errorBuilder: (_, __, ___) => Row(
                       mainAxisAlignment: MainAxisAlignment.center,
@@ -88,10 +125,12 @@ class WelcomePage extends StatelessWidget {
                     ),
                   ),
                 ),
-                const Spacer(flex: 4),
+
+                const Spacer(),
+
                 // Title and description
                 Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 40),
+                  padding: const EdgeInsets.symmetric(horizontal: 45),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -101,9 +140,10 @@ class WelcomePage extends StatelessWidget {
                           color: Colors.white,
                           fontSize: 25,
                           fontWeight: FontWeight.w800,
+                          height: 1.24,
                         ),
                       ),
-                      const SizedBox(height: 12),
+                      const SizedBox(height: 18),
                       Text(
                         'Lorem Ipsum is simply dummy text of the printing and\ntypesetting industry. Lorem Ipsum has been the industry\'s',
                         style: GoogleFonts.lexend(
@@ -113,70 +153,84 @@ class WelcomePage extends StatelessWidget {
                           height: 1.67,
                         ),
                       ),
-                      const SizedBox(height: 32),
-                      // Buttons
+                      SizedBox(height: size.height * 0.05),
+                      // Buttons row
                       Row(
                         children: [
-                          // SCAN button
+                          // SCAN button (text left, icon right)
                           Expanded(
-                            child: ElevatedButton.icon(
-                              onPressed: () =>
-                                  Navigator.pushNamed(context, '/scan'),
-                              icon: const Icon(
-                                Icons.qr_code_scanner,
-                                color: Colors.white,
-                                size: 22,
-                              ),
-                              label: Text(
-                                'SCAN',
-                                style: GoogleFonts.lexend(
-                                  color: Colors.white,
-                                  fontSize: 15,
-                                  fontWeight: FontWeight.w700,
+                            child: SizedBox(
+                              height: 48,
+                              child: ElevatedButton(
+                                onPressed: () =>
+                                    Navigator.pushNamed(context, '/scan'),
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: const Color(0xFF009933),
+                                  padding: EdgeInsets.zero,
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(25),
+                                  ),
+                                  elevation: 0,
                                 ),
-                              ),
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor: const Color(0xFF009933),
-                                padding: const EdgeInsets.symmetric(
-                                  vertical: 14,
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Text(
+                                      'SCAN',
+                                      style: GoogleFonts.lexend(
+                                        color: Colors.white,
+                                        fontSize: 15,
+                                        fontWeight: FontWeight.w700,
+                                      ),
+                                    ),
+                                    const SizedBox(width: 10),
+                                    const Icon(
+                                      Icons.qr_code_scanner,
+                                      color: Colors.white,
+                                      size: 24,
+                                    ),
+                                  ],
                                 ),
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(25),
-                                ),
-                                elevation: 0,
                               ),
                             ),
                           ),
-                          const SizedBox(width: 16),
-                          // LOGIN button
+                          const SizedBox(width: 22),
+                          // LOGIN button (text left, icon right)
                           Expanded(
-                            child: ElevatedButton.icon(
-                              onPressed: () =>
-                                  Navigator.pushNamed(context, '/login'),
-                              icon: const Icon(
-                                Icons.login,
-                                color: Colors.white,
-                                size: 22,
-                              ),
-                              label: Text(
-                                'LOGIN',
-                                style: GoogleFonts.lexend(
-                                  color: Colors.white,
-                                  fontSize: 15,
-                                  fontWeight: FontWeight.w700,
+                            child: SizedBox(
+                              height: 48,
+                              child: ElevatedButton(
+                                onPressed: () =>
+                                    Navigator.pushNamed(context, '/login'),
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: Colors.white.withValues(
+                                    alpha: 0.20,
+                                  ),
+                                  padding: EdgeInsets.zero,
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(25),
+                                  ),
+                                  elevation: 0,
                                 ),
-                              ),
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor: Colors.white.withValues(
-                                  alpha: 0.20,
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Text(
+                                      'LOGIN',
+                                      style: GoogleFonts.lexend(
+                                        color: Colors.white,
+                                        fontSize: 15,
+                                        fontWeight: FontWeight.w700,
+                                      ),
+                                    ),
+                                    const SizedBox(width: 10),
+                                    const Icon(
+                                      Icons.login,
+                                      color: Colors.white,
+                                      size: 24,
+                                    ),
+                                  ],
                                 ),
-                                padding: const EdgeInsets.symmetric(
-                                  vertical: 14,
-                                ),
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(25),
-                                ),
-                                elevation: 0,
                               ),
                             ),
                           ),
@@ -185,7 +239,20 @@ class WelcomePage extends StatelessWidget {
                     ],
                   ),
                 ),
-                const SizedBox(height: 40),
+
+                SizedBox(height: size.height * 0.045),
+
+                // Version text
+                Text(
+                  'version. 1.0.7',
+                  style: GoogleFonts.inter(
+                    color: const Color(0xFFA4A4A4),
+                    fontSize: 13,
+                    fontWeight: FontWeight.w800,
+                  ),
+                ),
+
+                SizedBox(height: size.height * 0.02),
               ],
             ),
           ),
