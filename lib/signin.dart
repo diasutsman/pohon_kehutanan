@@ -1,3 +1,4 @@
+import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -29,39 +30,71 @@ class _SignInPageState extends State<SignInPage> {
       body: Stack(
         fit: StackFit.expand,
         children: [
-          // Forest background
+          // Background image
           Image.asset(
-            'figma-uis/SIGN IN.png',
+            'assets/images/bg-login2.png',
             fit: BoxFit.cover,
             width: size.width,
             height: size.height,
-            errorBuilder: (_, __, ___) =>
-                Container(color: const Color(0xFF2D5016)),
           ),
-          // Gradient overlay
+
+          // Full-screen backdrop blur
+          ClipRect(
+            child: BackdropFilter(
+              filter: ImageFilter.blur(sigmaX: 5.85, sigmaY: 5.85),
+              child: Container(color: Colors.transparent),
+            ),
+          ),
+
+          // First gradient overlay
           Container(
-            decoration: BoxDecoration(
+            decoration: const BoxDecoration(
               gradient: LinearGradient(
-                begin: const Alignment(0.5, 0.4),
-                end: const Alignment(0.5, 1.3),
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+                stops: [0.3648, 0.6373, 0.9572],
                 colors: [
-                  const Color(0x00009933),
-                  const Color(0xFF003311).withValues(alpha: 0.8),
+                  Color(0x00009933),
+                  Color(0xFF003311),
+                  Color(0xFF03210D),
                 ],
               ),
             ),
           ),
+
+          // Second gradient overlay (lighter, bottom-heavy)
+          Container(
+            decoration: const BoxDecoration(
+              gradient: LinearGradient(
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+                stops: [0.6416, 1.0],
+                colors: [Color(0x00009933), Color(0xFF003311)],
+              ),
+            ),
+          ),
+
           // Content
           SafeArea(
             child: SingleChildScrollView(
-              padding: const EdgeInsets.symmetric(horizontal: 40),
+              padding: const EdgeInsets.symmetric(horizontal: 45),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  // Top spacing
                   const SizedBox(height: 40),
+
                   // Logo
-                  _buildLogo(),
-                  const SizedBox(height: 32),
+                  Image.asset(
+                    'assets/images/logo.png',
+                    height: 72,
+                    fit: BoxFit.contain,
+                    errorBuilder: (_, __, ___) => _buildLogoFallback(),
+                  ),
+
+                  // Gap: 225 - 107 - 72 = 46
+                  const SizedBox(height: 46),
+
                   // Title
                   Text(
                     'Hello, Silahkan Daftar',
@@ -69,9 +102,14 @@ class _SignInPageState extends State<SignInPage> {
                       color: Colors.black,
                       fontSize: 25,
                       fontWeight: FontWeight.w800,
+                      height: 1.24,
                     ),
                   ),
-                  const SizedBox(height: 8),
+
+                  // Gap: 267 - 225 - 31 = 11
+                  const SizedBox(height: 11),
+
+                  // Description
                   Text(
                     'Lorem Ipsum is simply dummy text of the printing and\ntypesetting industry. Lorem Ipsum has been the industry\'s',
                     style: GoogleFonts.lexend(
@@ -81,29 +119,41 @@ class _SignInPageState extends State<SignInPage> {
                       height: 1.67,
                     ),
                   ),
-                  const SizedBox(height: 60),
+
+                  // Gap: 386 - 267 - 40 = 79
+                  const SizedBox(height: 79),
+
                   // Nama field
                   _buildTextField(
                     controller: _nameController,
                     hintText: 'Nama',
                   ),
-                  const SizedBox(height: 20),
+
+                  // Gap: 471 - 386 - 60 = 25
+                  const SizedBox(height: 25),
+
                   // Email field
                   _buildTextField(
                     controller: _emailController,
                     hintText: 'Email',
                   ),
-                  const SizedBox(height: 20),
+
+                  // Gap: 554 - 471 - 60 = 23
+                  const SizedBox(height: 23),
+
                   // No telpon field
                   _buildTextField(
                     controller: _phoneController,
                     hintText: 'No telpon',
                   ),
-                  const SizedBox(height: 24),
+
+                  // Gap: 639 - 554 - 60 = 25
+                  const SizedBox(height: 25),
+
                   // SIGN IN button
                   SizedBox(
                     width: double.infinity,
-                    height: 56,
+                    height: 60,
                     child: ElevatedButton(
                       onPressed: () =>
                           Navigator.pushReplacementNamed(context, '/login'),
@@ -125,7 +175,10 @@ class _SignInPageState extends State<SignInPage> {
                       ),
                     ),
                   ),
-                  const SizedBox(height: 28),
+
+                  // Gap: 724 - 639 - 60 = 25
+                  const SizedBox(height: 25),
+
                   // "Sudah punya akun?"
                   Center(
                     child: GestureDetector(
@@ -141,7 +194,23 @@ class _SignInPageState extends State<SignInPage> {
                       ),
                     ),
                   ),
-                  const SizedBox(height: 40),
+
+                  // Gap to version text
+                  SizedBox(height: size.height * 0.12),
+
+                  // Version text
+                  Center(
+                    child: Text(
+                      'version. 1.0.7',
+                      style: GoogleFonts.inter(
+                        color: const Color(0xFFA4A4A4),
+                        fontSize: 13,
+                        fontWeight: FontWeight.w800,
+                      ),
+                    ),
+                  ),
+
+                  const SizedBox(height: 20),
                 ],
               ),
             ),
@@ -151,7 +220,7 @@ class _SignInPageState extends State<SignInPage> {
     );
   }
 
-  Widget _buildLogo() {
+  Widget _buildLogoFallback() {
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: [
@@ -196,6 +265,7 @@ class _SignInPageState extends State<SignInPage> {
     required String hintText,
   }) {
     return Container(
+      height: 60,
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(25),

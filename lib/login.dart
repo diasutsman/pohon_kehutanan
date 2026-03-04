@@ -1,3 +1,4 @@
+import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -28,39 +29,71 @@ class _LoginPageState extends State<LoginPage> {
       body: Stack(
         fit: StackFit.expand,
         children: [
-          // Forest background
+          // Background image
           Image.asset(
-            'figma-uis/LOGIN.png',
+            'assets/images/bg-login2.png',
             fit: BoxFit.cover,
             width: size.width,
             height: size.height,
-            errorBuilder: (_, __, ___) =>
-                Container(color: const Color(0xFF2D5016)),
           ),
-          // Gradient overlay
+
+          // Full-screen backdrop blur
+          ClipRect(
+            child: BackdropFilter(
+              filter: ImageFilter.blur(sigmaX: 5.85, sigmaY: 5.85),
+              child: Container(color: Colors.transparent),
+            ),
+          ),
+
+          // First gradient overlay
           Container(
-            decoration: BoxDecoration(
+            decoration: const BoxDecoration(
               gradient: LinearGradient(
-                begin: const Alignment(0.5, 0.4),
-                end: const Alignment(0.5, 1.3),
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+                stops: [0.3648, 0.6373, 0.9572],
                 colors: [
-                  const Color(0x00009933),
-                  const Color(0xFF003311).withValues(alpha: 0.8),
+                  Color(0x00009933),
+                  Color(0xFF003311),
+                  Color(0xFF03210D),
                 ],
               ),
             ),
           ),
+
+          // Second gradient overlay (lighter, bottom-heavy)
+          Container(
+            decoration: const BoxDecoration(
+              gradient: LinearGradient(
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+                stops: [0.6416, 1.0],
+                colors: [Color(0x00009933), Color(0xFF003311)],
+              ),
+            ),
+          ),
+
           // Content
           SafeArea(
             child: SingleChildScrollView(
-              padding: const EdgeInsets.symmetric(horizontal: 40),
+              padding: const EdgeInsets.symmetric(horizontal: 45),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  // Top spacing (~107px from top of screen, minus safe area)
                   const SizedBox(height: 40),
+
                   // Logo
-                  _buildLogo(),
-                  const SizedBox(height: 32),
+                  Image.asset(
+                    'assets/images/logo.png',
+                    height: 72,
+                    fit: BoxFit.contain,
+                    errorBuilder: (_, __, ___) => _buildLogoFallback(),
+                  ),
+
+                  // Gap: 225 - 107 - 72 = 46
+                  const SizedBox(height: 46),
+
                   // Title
                   Text(
                     'Hello, Silahkan Login',
@@ -68,9 +101,14 @@ class _LoginPageState extends State<LoginPage> {
                       color: Colors.black,
                       fontSize: 25,
                       fontWeight: FontWeight.w800,
+                      height: 1.24,
                     ),
                   ),
-                  const SizedBox(height: 8),
+
+                  // Gap: 267 - 225 - 31 = 11
+                  const SizedBox(height: 11),
+
+                  // Description
                   Text(
                     'Lorem Ipsum is simply dummy text of the printing and\ntypesetting industry. Lorem Ipsum has been the industry\'s',
                     style: GoogleFonts.lexend(
@@ -80,13 +118,19 @@ class _LoginPageState extends State<LoginPage> {
                       height: 1.67,
                     ),
                   ),
-                  const SizedBox(height: 60),
+
+                  // Gap: 392 - 267 - 40 = 85
+                  const SizedBox(height: 85),
+
                   // Username field
                   _buildTextField(
                     controller: _usernameController,
                     hintText: 'Username...',
                   ),
-                  const SizedBox(height: 20),
+
+                  // Gap: 478 - 392 - 60 = 26
+                  const SizedBox(height: 26),
+
                   // Password field
                   _buildTextField(
                     controller: _passwordController,
@@ -103,11 +147,14 @@ class _LoginPageState extends State<LoginPage> {
                           setState(() => _obscurePassword = !_obscurePassword),
                     ),
                   ),
-                  const SizedBox(height: 24),
+
+                  // Gap: 564 - 478 - 60 = 26
+                  const SizedBox(height: 26),
+
                   // LOGIN button
                   SizedBox(
                     width: double.infinity,
-                    height: 56,
+                    height: 60,
                     child: ElevatedButton(
                       onPressed: () =>
                           Navigator.pushReplacementNamed(context, '/home'),
@@ -129,7 +176,10 @@ class _LoginPageState extends State<LoginPage> {
                       ),
                     ),
                   ),
-                  const SizedBox(height: 28),
+
+                  // Gap: 661 - 564 - 60 = 37
+                  const SizedBox(height: 37),
+
                   // "Belum punya akun?"
                   Center(
                     child: GestureDetector(
@@ -145,8 +195,11 @@ class _LoginPageState extends State<LoginPage> {
                       ),
                     ),
                   ),
-                  const SizedBox(height: 20),
-                  // Social login
+
+                  // Gap: 711 - 661 - 20 = 30
+                  const SizedBox(height: 30),
+
+                  // "Login menggunakan sosmed"
                   Center(
                     child: Text(
                       'Login menggunakan sosmed',
@@ -157,17 +210,62 @@ class _LoginPageState extends State<LoginPage> {
                       ),
                     ),
                   ),
-                  const SizedBox(height: 16),
+
+                  // Gap: 745 - 711 - 20 = 14
+                  const SizedBox(height: 14),
+
                   // Social buttons
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      _buildSocialButton(Icons.g_mobiledata, 'G'),
-                      const SizedBox(width: 16),
-                      _buildSocialButton(Icons.facebook, 'F'),
+                      // Google button
+                      Container(
+                        width: 49,
+                        height: 49,
+                        decoration: const BoxDecoration(
+                          color: Colors.white,
+                          shape: BoxShape.circle,
+                        ),
+                        child: const Icon(
+                          Icons.g_mobiledata,
+                          color: Colors.red,
+                          size: 28,
+                        ),
+                      ),
+                      const SizedBox(width: 11),
+                      // Facebook button
+                      Container(
+                        width: 49,
+                        height: 49,
+                        decoration: const BoxDecoration(
+                          color: Colors.white,
+                          shape: BoxShape.circle,
+                        ),
+                        child: const Icon(
+                          Icons.facebook,
+                          color: Color(0xFF1877F2),
+                          size: 28,
+                        ),
+                      ),
                     ],
                   ),
-                  const SizedBox(height: 40),
+
+                  // Gap to version text
+                  SizedBox(height: size.height * 0.08),
+
+                  // Version text
+                  Center(
+                    child: Text(
+                      'version. 1.0.7',
+                      style: GoogleFonts.inter(
+                        color: const Color(0xFFA4A4A4),
+                        fontSize: 13,
+                        fontWeight: FontWeight.w800,
+                      ),
+                    ),
+                  ),
+
+                  const SizedBox(height: 20),
                 ],
               ),
             ),
@@ -177,7 +275,7 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  Widget _buildLogo() {
+  Widget _buildLogoFallback() {
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: [
@@ -224,6 +322,7 @@ class _LoginPageState extends State<LoginPage> {
     Widget? suffixIcon,
   }) {
     return Container(
+      height: 60,
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(25),
@@ -253,22 +352,6 @@ class _LoginPageState extends State<LoginPage> {
           border: InputBorder.none,
           suffixIcon: suffixIcon,
         ),
-      ),
-    );
-  }
-
-  Widget _buildSocialButton(IconData icon, String label) {
-    return Container(
-      width: 49,
-      height: 49,
-      decoration: const BoxDecoration(
-        color: Colors.white,
-        shape: BoxShape.circle,
-      ),
-      child: Icon(
-        icon,
-        color: label == 'G' ? Colors.red : const Color(0xFF1877F2),
-        size: 28,
       ),
     );
   }
