@@ -79,7 +79,7 @@ class _DetailProfileNamePageState extends State<DetailProfileNamePage> {
                     shape: BoxShape.circle,
                     color: const Color(0xFFD9D9D9),
                     image: const DecorationImage(
-                      image: AssetImage('figma-uis/PROFILE.png'),
+                      image: AssetImage('assets/images/pp.png'),
                       fit: BoxFit.cover,
                     ),
                   ),

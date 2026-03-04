@@ -82,7 +82,7 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
                     shape: BoxShape.circle,
                     color: const Color(0xFFD9D9D9),
                     image: const DecorationImage(
-                      image: AssetImage('figma-uis/PROFILE.png'),
+                      image: AssetImage('assets/images/pp.png'),
                       fit: BoxFit.cover,
                     ),
                   ),
@@ -218,8 +218,10 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
           border: InputBorder.none,
           suffixIcon: IconButton(
             icon: Icon(
-              obscure ? Icons.visibility_off : Icons.visibility,
-              color: const Color(0xFFC0C0C0),
+              obscure
+                  ? Icons.visibility_off_outlined
+                  : Icons.visibility_outlined,
+              color: const Color(0xFFD1D1D1),
             ),
             onPressed: () => onToggle(!obscure),
           ),

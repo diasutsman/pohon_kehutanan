@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'bottom_nav_scaffold.dart';
 
@@ -19,9 +20,9 @@ class HistoryPage extends StatelessWidget {
               Container(
                 width: double.infinity,
                 height: 140,
-                decoration: BoxDecoration(
-                  color: const Color(0xFF009933),
-                  borderRadius: const BorderRadius.only(
+                decoration: const BoxDecoration(
+                  color: Color(0xFF009933),
+                  borderRadius: BorderRadius.only(
                     bottomLeft: Radius.circular(42),
                     bottomRight: Radius.circular(42),
                   ),
@@ -66,7 +67,7 @@ class HistoryPage extends StatelessWidget {
                     shape: BoxShape.circle,
                     color: const Color(0xFFD9D9D9),
                     image: const DecorationImage(
-                      image: AssetImage('figma-uis/PROFILE.png'),
+                      image: AssetImage('assets/images/pp.png'),
                       fit: BoxFit.cover,
                     ),
                   ),
@@ -124,24 +125,28 @@ class HistoryPage extends StatelessWidget {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Bookmark icon + image
+          // Tree icon + plant image column
           Column(
             children: [
-              Icon(Icons.bookmark_border, color: Colors.black54, size: 28),
-              const SizedBox(height: 4),
+              SvgPicture.asset(
+                'assets/images/ph_tree_green.svg',
+                width: 34,
+                height: 34,
+              ),
+              const SizedBox(height: 6),
               ClipRRect(
-                borderRadius: BorderRadius.circular(10),
+                borderRadius: BorderRadius.circular(13),
                 child: Image.asset(
-                  'figma-uis/DESKRIPSI TANAMAN.png',
-                  width: 55,
-                  height: 80,
+                  'assets/images/history-image.png',
+                  width: 60,
+                  height: 89,
                   fit: BoxFit.cover,
                   errorBuilder: (_, __, ___) => Container(
-                    width: 55,
-                    height: 80,
+                    width: 60,
+                    height: 89,
                     decoration: BoxDecoration(
                       color: const Color(0xFF4A7C2E),
-                      borderRadius: BorderRadius.circular(10),
+                      borderRadius: BorderRadius.circular(13),
                     ),
                     child: const Icon(
                       Icons.local_florist,
@@ -154,7 +159,7 @@ class HistoryPage extends StatelessWidget {
             ],
           ),
           const SizedBox(width: 12),
-          // Info
+          // Info + bottom row
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -167,54 +172,55 @@ class HistoryPage extends StatelessWidget {
                     fontWeight: FontWeight.w600,
                   ),
                 ),
-                const SizedBox(height: 4),
+                const SizedBox(height: 6),
                 Text(
-                  'Habitat Alami tumbuh\nsubur di lingkungan lembab\ndan dekat....',
+                  'Habitat Alami tumbuh subur di lingkungan lembab dan dekat....',
                   style: GoogleFonts.lexend(
                     color: Colors.black,
                     fontSize: 12,
                     fontWeight: FontWeight.w400,
+                    height: 1.25,
                   ),
+                ),
+                const SizedBox(height: 12),
+                // Date + View button row
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Text(
+                      '20 Nov 2025',
+                      style: GoogleFonts.lexend(
+                        color: Colors.black,
+                        fontSize: 8,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                    GestureDetector(
+                      onTap: () => Navigator.pushNamed(context, '/deskripsi'),
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 20,
+                          vertical: 4,
+                        ),
+                        decoration: BoxDecoration(
+                          color: const Color(0xFF009933),
+                          borderRadius: BorderRadius.circular(13.5),
+                        ),
+                        child: Text(
+                          'View',
+                          style: GoogleFonts.lexend(
+                            color: Colors.white,
+                            fontSize: 15,
+                            fontWeight: FontWeight.w400,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
               ],
             ),
-          ),
-          // Date + view button
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.end,
-            children: [
-              const SizedBox(height: 70),
-              Text(
-                '20 Nov 2025',
-                style: GoogleFonts.lexend(
-                  color: Colors.black,
-                  fontSize: 8,
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
-              const SizedBox(height: 4),
-              GestureDetector(
-                onTap: () => Navigator.pushNamed(context, '/deskripsi'),
-                child: Container(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 20,
-                    vertical: 4,
-                  ),
-                  decoration: BoxDecoration(
-                    color: const Color(0xFF009933),
-                    borderRadius: BorderRadius.circular(13.5),
-                  ),
-                  child: Text(
-                    'View',
-                    style: GoogleFonts.lexend(
-                      color: Colors.white,
-                      fontSize: 13,
-                      fontWeight: FontWeight.w400,
-                    ),
-                  ),
-                ),
-              ),
-            ],
           ),
         ],
       ),
