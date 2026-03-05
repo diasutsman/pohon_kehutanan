@@ -43,7 +43,7 @@ class MyApp extends StatelessWidget {
         '/scan': (context) => const ScanPage(),
         '/deskripsi': (context) => const DeskripsiTanamanPage(),
         '/ai': (context) => const AiPage(),
-        '/ai-chat': (context) => const AiPageChat(),
+        // '/ai-chat': (context) => const AiPageChat(),
         '/history': (context) => const HistoryPage(),
         '/profile': (context) => const ProfilePage(),
         '/change-password': (context) => const ChangePasswordPage(),

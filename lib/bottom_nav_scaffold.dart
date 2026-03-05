@@ -82,9 +82,16 @@ class _BottomNavScaffoldState extends State<BottomNavScaffold> {
     final color = isActive ? const Color(0xFF009933) : const Color(0xFFBBBBBB);
     return InkWell(
       onTap: () {
-        setState(() {
-          _currentIndex = index;
-        });
+        if (index == 1) {
+          // AI button navigates to the AI page
+          Navigator.pushNamed(context, '/ai');
+        } else if (index == 3) {
+          // Pohon button disabled — do nothing
+        } else {
+          setState(() {
+            _currentIndex = index;
+          });
+        }
       },
       child: Column(
         mainAxisSize: MainAxisSize.min,

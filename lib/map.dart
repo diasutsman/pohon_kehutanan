@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class MapPage extends StatelessWidget {
@@ -10,12 +11,9 @@ class MapPage extends StatelessWidget {
 
     return Stack(
       children: [
-        // Map background
-        Container(
-          width: size.width,
-          height: size.height,
-          color: const Color(0xFFE8E0D0),
-          child: CustomPaint(painter: _MapPainter()),
+        // Map background image
+        Positioned.fill(
+          child: Image.asset('assets/images/map.png', fit: BoxFit.cover),
         ),
         // Back button
         Positioned(
@@ -47,64 +45,43 @@ class MapPage extends StatelessWidget {
         ),
         // Logo (top right)
         Positioned(
-          top: MediaQuery.of(context).padding.top + 14,
+          top: MediaQuery.of(context).padding.top + 10,
           right: 20,
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Icon(Icons.park, color: const Color(0xFF009933), size: 28),
-              const SizedBox(width: 4),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Text(
-                    'KEMENTERIAN',
-                    style: GoogleFonts.lexend(
-                      color: const Color(0xFF009933),
-                      fontSize: 6,
-                      fontWeight: FontWeight.w700,
-                    ),
-                  ),
-                  Text(
-                    'KEHUTANAN',
-                    style: GoogleFonts.lexend(
-                      color: const Color(0xFF009933),
-                      fontSize: 10,
-                      fontWeight: FontWeight.w800,
-                    ),
-                  ),
-                ],
-              ),
-            ],
+          child: Image.asset(
+            'assets/images/logo.png',
+            height: 44,
+            fit: BoxFit.contain,
           ),
         ),
-        // Tree marker 1
+        // Tree marker 1 — Entotolobium (top-right area)
         _buildTreeMarker(
           context,
-          top: size.height * 0.20,
-          left: size.width * 0.55,
+          top: size.height * 0.18,
+          left: size.width * 0.50,
           plantName: 'Entotolobium cy...',
           description:
               'Tumbuh optimal di dataran\nrendah hingga ketinggian\n1.200 mdpl....',
+          imagePath: 'assets/images/map-image-2.png',
         ),
-        // Tree marker 2
+        // Tree marker 2 — Billenia (middle-left area)
         _buildTreeMarker(
           context,
-          top: size.height * 0.42,
-          left: size.width * 0.15,
+          top: size.height * 0.38,
+          left: size.width * 0.08,
           plantName: 'Billenia indica L',
           description:
               'Habitat Alami tumbuh\nsubur di lingkungan lembab\ndan dekat....',
+          imagePath: 'assets/images/map-image-1.png',
         ),
-        // Tree marker 3
+        // Tree marker 3 — Billenia (lower-right area)
         _buildTreeMarker(
           context,
-          top: size.height * 0.58,
-          left: size.width * 0.55,
+          top: size.height * 0.56,
+          left: size.width * 0.50,
           plantName: 'Billenia indica L',
           description:
               'Habitat Alami tumbuh\nsubur di lingkungan lembab\ndan dekat....',
+          imagePath: 'assets/images/map-image-1.png',
         ),
       ],
     );
@@ -116,46 +93,45 @@ class MapPage extends StatelessWidget {
     required double left,
     required String plantName,
     required String description,
+    required String imagePath,
   }) {
     return Positioned(
       top: top,
       left: left,
       child: Column(
         children: [
-          // Pin icon
-          Icon(Icons.location_on, color: const Color(0xFF009933), size: 34),
+          // Tree pin icon
+          SvgPicture.asset(
+            'assets/images/ph_tree_green.svg',
+            width: 38,
+            height: 38,
+          ),
+          const SizedBox(height: 2),
           // Info card
           GestureDetector(
             onTap: () => Navigator.pushNamed(context, '/deskripsi'),
             child: Container(
-              width: 170,
-              padding: const EdgeInsets.all(8),
+              width: 172,
+              padding: const EdgeInsets.all(6),
               decoration: BoxDecoration(
                 color: Colors.white,
                 borderRadius: BorderRadius.circular(13),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black12,
-                    blurRadius: 4,
-                    offset: const Offset(0, 2),
-                  ),
-                ],
               ),
               child: Row(
                 children: [
                   ClipRRect(
-                    borderRadius: BorderRadius.circular(10),
+                    borderRadius: BorderRadius.circular(13),
                     child: Image.asset(
-                      'figma-uis/DESKRIPSI TANAMAN.png',
-                      width: 40,
-                      height: 58,
+                      imagePath,
+                      width: 43,
+                      height: 64,
                       fit: BoxFit.cover,
                       errorBuilder: (_, __, ___) => Container(
-                        width: 40,
-                        height: 58,
+                        width: 43,
+                        height: 64,
                         decoration: BoxDecoration(
                           color: const Color(0xFF4A7C2E),
-                          borderRadius: BorderRadius.circular(10),
+                          borderRadius: BorderRadius.circular(13),
                         ),
                         child: const Icon(
                           Icons.local_florist,
@@ -165,7 +141,7 @@ class MapPage extends StatelessWidget {
                       ),
                     ),
                   ),
-                  const SizedBox(width: 8),
+                  const SizedBox(width: 6),
                   Expanded(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -174,7 +150,7 @@ class MapPage extends StatelessWidget {
                           plantName,
                           style: GoogleFonts.lexend(
                             color: const Color(0xFF009933),
-                            fontSize: 10,
+                            fontSize: 12,
                             fontWeight: FontWeight.w600,
                           ),
                           maxLines: 1,
@@ -185,8 +161,9 @@ class MapPage extends StatelessWidget {
                           description,
                           style: GoogleFonts.lexend(
                             color: Colors.black,
-                            fontSize: 7,
+                            fontSize: 8,
                             fontWeight: FontWeight.w400,
+                            height: 1.25,
                           ),
                           maxLines: 3,
                           overflow: TextOverflow.ellipsis,
@@ -202,80 +179,4 @@ class MapPage extends StatelessWidget {
       ),
     );
   }
-}
-
-class _MapPainter extends CustomPainter {
-  @override
-  void paint(Canvas canvas, Size size) {
-    final paint = Paint()..style = PaintingStyle.fill;
-
-    // Draw some green areas to simulate a map
-    paint.color = const Color(0xFFC5D9B2).withValues(alpha: 0.6);
-    canvas.drawOval(
-      Rect.fromLTWH(
-        size.width * 0.1,
-        size.height * 0.15,
-        size.width * 0.35,
-        size.height * 0.2,
-      ),
-      paint,
-    );
-    canvas.drawOval(
-      Rect.fromLTWH(
-        size.width * 0.5,
-        size.height * 0.3,
-        size.width * 0.45,
-        size.height * 0.25,
-      ),
-      paint,
-    );
-    canvas.drawOval(
-      Rect.fromLTWH(
-        size.width * 0.05,
-        size.height * 0.5,
-        size.width * 0.4,
-        size.height * 0.15,
-      ),
-      paint,
-    );
-
-    // Draw some roads
-    paint.color = const Color(0xFFD5CEC0);
-    paint.style = PaintingStyle.stroke;
-    paint.strokeWidth = 3;
-    final path = Path()
-      ..moveTo(0, size.height * 0.4)
-      ..quadraticBezierTo(
-        size.width * 0.3,
-        size.height * 0.35,
-        size.width * 0.6,
-        size.height * 0.5,
-      )
-      ..quadraticBezierTo(
-        size.width * 0.8,
-        size.height * 0.6,
-        size.width,
-        size.height * 0.55,
-      );
-    canvas.drawPath(path, paint);
-
-    final path2 = Path()
-      ..moveTo(size.width * 0.5, 0)
-      ..quadraticBezierTo(
-        size.width * 0.45,
-        size.height * 0.25,
-        size.width * 0.5,
-        size.height * 0.5,
-      )
-      ..quadraticBezierTo(
-        size.width * 0.55,
-        size.height * 0.75,
-        size.width * 0.5,
-        size.height,
-      );
-    canvas.drawPath(path2, paint);
-  }
-
-  @override
-  bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
 }
